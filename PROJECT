@@ -1,0 +1,20 @@
+domain: vastdata.com
+layout:
+- quarkus.javaoperatorsdk.io/v1-alpha
+projectName: mysql-for-verify
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: vastdata.com
+  group: mysql
+  kind: MysqlReplica
+  version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: vastdata.com
+  group: mysql
+  kind: MysqlUser
+  version: v1alpha1
+version: "3"
