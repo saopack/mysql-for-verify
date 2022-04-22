@@ -217,6 +217,7 @@ public class MysqlReplicaReconciler implements Reconciler<MysqlReplica> {
     objectMeta.setLabels(labels);
 
     Map<String, String> configData = new HashMap<>();
+    //TODO 这里要整合一下
     configData.put("my.cnf", mysqlReplicaSpec.getConfigData());
 
     var configMap = new ConfigMap();

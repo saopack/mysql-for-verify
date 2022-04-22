@@ -30,6 +30,9 @@ public class MysqlReplicaSpec {
      */
     private Map<String, String> resourceLimits;
 
+    /**
+     * 容器的端口。MySQL默认3306
+     */
     private Integer containerPort;
 
     /**

@@ -1,0 +1,20 @@
+---
+apiVersion: mysql.vastdata.com
+kind: MysqlReplica
+metadata:
+  name: my-replica
+spec:
+  replicas: 1
+  secretName: my-secret
+  image: mysql:5.7.37
+  resourceLimits:
+    memory: "256Mi"
+    cpu: "500m"
+  containerPort: 3306
+  volumeMounts:
+    - name: mysql-persistent-storage
+      mountPath: /usr/local/mysqldata
+    - name: mysqlcnf
+      mountPath: /etc/my.cnf
+      subPath: etc/my.cnf
+  myConf:
