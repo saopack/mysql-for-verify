@@ -36,27 +36,42 @@ public class MysqlReplicaReconciler implements Reconciler<MysqlReplica> {
     final var persistentVolume = buildPersistentVolume(resource);
     // Step 2 新建PVC
     final var persistentVolumeClaim = buildPersistentVolumeClaim(resource);
-
     // Step 3 新建configMap
     final var configMap = buildConfigMap(resource);
-
     // Step 4 新建Pod-StatefulSet
     final var statefulSet = buildStatefulSet(resource, secret);
     // Step 5 新建Headless Service
     final var headlessService = buildHeadlessService(resource);
 
+    var pvResource = client.resources(PersistentVolume.class).withName(spec.getPvcName());
+    var pvcResource = client.resources(PersistentVolumeClaim.class).withName(spec.getPvcName());
+    var configMapResource = client.resources(ConfigMap.class).withName(spec.getConfigMapName());
+    var statefulSetResource = client.resources(StatefulSet.class).withName(spec.getStatefulSetName());
+    var headlessServiceResource = client.resources(Service.class).withName(spec.getHeadlessServiceName());
+
     // 判断这些资源是不是存在，可以用断言，代码好看一些
-    var pvcExisting
-            = client.resources(PersistentVolumeClaim.class).withName(spec.getPvcName());
-    var pvExisting
-            = client.resources(PersistentVolume.class).withName(spec.getPvcName());
-    var cmExisting
-            = client.resources(ConfigMap.class).withName(spec.getConfigMapName());
-    var ssExisting
-            = client.resources(StatefulSet.class).withName(spec.getStatefulSetName());
-    var headlessServiceExisting
-            = client.resources(Service.class).withName(spec.getHeadlessServiceName());
+    var pvcExisting = pvcResource.get();
+    var pvExisting = pvResource.get();
+    var configMapExisting = configMapResource.get();
+    var statefulSetExisting = statefulSetResource.get();
+    var headlessServiceExisting = headlessServiceResource.get();
+
     // 资源不存在就创建
+    if (pvExisting == null) {
+      pvResource.createOrReplace(persistentVolume);
+    }
+    if (pvcExisting == null) {
+      pvcResource.createOrReplace(persistentVolumeClaim);
+    }
+    if (configMapExisting == null) {
+      configMapResource.createOrReplace(configMap);
+    }
+    if (statefulSetExisting == null) {
+      statefulSetResource.createOrReplace(statefulSet);
+    }
+    if (headlessServiceExisting == null) {
+      headlessServiceResource.createOrReplace(headlessService);
+    }
 
     return UpdateControl.noUpdate();
   }
