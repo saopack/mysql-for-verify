@@ -15,3 +15,11 @@
 因此controller的代码中主要的逻辑就是去创建这些资源。
 
 生成CR的sample文件在resources/sample下。
+
+## 2. 开发日志
+
+### 2022年4月24日
+
+1. 完成基本Spec和Controller功能的开发，还没上k8s测试过；
+2. pv和pvc的定义可能还存在问题；
+3. 计划今天完成上k8s测试。
